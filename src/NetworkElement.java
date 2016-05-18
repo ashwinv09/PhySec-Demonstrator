@@ -11,7 +11,7 @@ import java.util.List;
 public class NetworkElement {
     Point centerPoint;
     NetworkElementType elementType;
-    static BufferedImage imgServer, imgScalingElement;
+    static BufferedImage imgBaseStation, imgClient;
     boolean ifSelected = false;
     Rectangle focusRect = new Rectangle();
 
@@ -28,10 +28,10 @@ public class NetworkElement {
             classLoader = Thread.currentThread().getContextClassLoader();
 
             inputStreamIcon = classLoader.getResourceAsStream("baseStation.png");
-            imgServer = ImageIO.read(inputStreamIcon);
+            imgBaseStation = ImageIO.read(inputStreamIcon);
 
             inputStreamIcon = classLoader.getResourceAsStream("clientNode.png");
-            imgScalingElement = ImageIO.read(inputStreamIcon);
+            imgClient = ImageIO.read(inputStreamIcon);
         }
         catch (IOException ioe) {
             System.err.println(ioe);
@@ -42,15 +42,15 @@ public class NetworkElement {
         focusRect.setBounds(centerPoint.x - 32, centerPoint.y - 32, 64, 64);   // image size (hard-coded to 64x64 pixels)
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics graphics) {
         if (elementType == NetworkElementType.BASE_STATION_ELEMENT)
-            g.drawImage(imgServer, focusRect.x, focusRect.y, null);
+            graphics.drawImage(imgBaseStation, focusRect.x, focusRect.y, null);
         else if (elementType == NetworkElementType.CLIENT_ELEMENT)
-            g.drawImage(imgScalingElement, focusRect.x, focusRect.y, null);
+            graphics.drawImage(imgClient, focusRect.x, focusRect.y, null);
 
         if (ifSelected) {
-            g.setColor(Color.DARK_GRAY);
-            g.drawRect(focusRect.x, focusRect.y, 64, 64);
+            graphics.setColor(new Color(0x0000FF));
+            graphics.drawRect(focusRect.x, focusRect.y, 64, 64);
         }
     }
 
@@ -84,7 +84,7 @@ public class NetworkElement {
             element.setSelected(false);
     }
 
-    public static boolean selectOneElement (List<NetworkElement> elements, Point centerPoint) {
+    public static boolean selectOneElement(List<NetworkElement> elements, Point centerPoint) {
         for (NetworkElement element : elements) {
             if (element.contains(centerPoint)) {
                 if (!element.isSelected()) {
@@ -116,5 +116,13 @@ public class NetworkElement {
                 element.setFocusRect(element.focusRect);
             }
         }
+    }
+
+    public static NetworkElement getElementFromPoint(List<NetworkElement> elements, Point point) {
+        for (NetworkElement element : elements) {
+            if (element.contains(point))
+                return element;
+        }
+        return null;
     }
 }

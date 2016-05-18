@@ -11,10 +11,10 @@ public class NetworkConnection {
         this.element2 = element2;
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics graphics) {
         Point centerPoint1 = element1.getCenterPoint();
         Point centerPoint2 = element2.getCenterPoint();
-        g.setColor(Color.DARK_GRAY);
-        g.drawLine(centerPoint1.x, centerPoint1.y, centerPoint2.x, centerPoint2.y);
+        graphics.setColor(new Color(0xFF0000));
+        graphics.drawLine(centerPoint1.x, centerPoint1.y, centerPoint2.x, centerPoint2.y);
     }
 }
